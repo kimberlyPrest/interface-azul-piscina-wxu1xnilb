@@ -1,0 +1,338 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Lucenera Logistics Management Design System */
+
+@layer base {
+  :root {
+    /* Core backgrounds */
+    --background: 0 0% 100%;
+    --foreground: 265 4% 12.9%;
+
+    /* Card surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 265 4% 12.9%;
+
+    /* Popover/Modal */
+    --popover: 0 0% 100%;
+    --popover-foreground: 265 4% 12.9%;
+
+    /* Primary - Blue for actions and "Separando" status */
+    --primary: 266 4% 20.8%;
+    --primary-foreground: 248 0.3% 98.4%;
+    --primary-light: 214 95% 93%;
+    --primary-dark: 224 76% 48%;
+
+    /* Success - Green for "Separado" and completed */
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 152 76% 91%;
+    --success-dark: 161 94% 24%;
+
+    /* Secondary */
+    --secondary: 248 0.7% 96.8%;
+    --secondary-foreground: 266 4% 20.8%;
+
+    /* Muted */
+    --muted: 248 0.7% 96.8%;
+    --muted-foreground: 257 4.6% 55.4%;
+
+    /* Accent */
+    --accent: 248 0.7% 96.8%;
+    --accent-foreground: 266 4% 20.8%;
+
+    /* Destructive */
+    --destructive: 27 24.5% 57.7%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border & Input */
+    --border: 256 1.3% 92.9%;
+    --input: 256 1.3% 92.9%;
+    --ring: 257 4% 70.4%;
+
+    --radius: 0.375rem;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 265 4% 12.9%;
+    --sidebar-primary: 266 4% 20.8%;
+    --sidebar-primary-foreground: 248 0.3% 98.4%;
+    --sidebar-accent: 248 0.7% 96.8%;
+    --sidebar-accent-foreground: 266 4% 20.8%;
+    --sidebar-border: 256 1.3% 92.9%;
+    --sidebar-ring: 257 4% 70.4%;
+
+    /* Custom colors for status */
+    --status-separando-bg: 214 95% 93%;
+    --status-separando-text: 224 76% 48%;
+    --status-separando-border: 217 91% 60%;
+
+    --status-separado-bg: 152 76% 91%;
+    --status-separado-text: 161 94% 24%;
+    --status-separado-border: 160 84% 39%;
+    --chart-1: 41 22.2% 64.6%;
+    --chart-2: 185 11.8% 60%;
+    --chart-3: 227 7% 39.8%;
+    --chart-4: 84 18.9% 82.8%;
+    --chart-5: 70 18.8% 76.9%;
+    --sidebar: 248 0.3% 98.4%;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
+  }
+
+  .dark {
+    --background: 0 0% 15%;
+    --foreground: 248 0.3% 98.4%;
+
+    --card: 266 4% 20.8%;
+    --card-foreground: 248 0.3% 98.4%;
+
+    --popover: 266 4% 20.8%;
+    --popover-foreground: 248 0.3% 98.4%;
+
+    --primary: 256 1.3% 92.9%;
+    --primary-foreground: 266 4% 20.8%;
+    --primary-light: 224 76% 20%;
+    --primary-dark: 214 95% 70%;
+
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 161 50% 15%;
+    --success-dark: 152 76% 70%;
+
+    --secondary: 260 4.1% 27.9%;
+    --secondary-foreground: 248 0.3% 98.4%;
+
+    --muted: 260 4.1% 27.9%;
+    --muted-foreground: 257 4% 70.4%;
+
+    --accent: 260 4.1% 27.9%;
+    --accent-foreground: 248 0.3% 98.4%;
+
+    --destructive: 22 19.1% 70.4%;
+    --destructive-foreground: 248 0.3% 98.4%;
+
+    --border: 0 0% 100% / 10%;
+    --input: 0 0% 100% / 15%;
+    --ring: 264 2.7% 55.1%;
+
+    --sidebar-background: 220 13% 10%;
+    --sidebar-foreground: 248 0.3% 98.4%;
+    --sidebar-primary: 264 24.3% 48.8%;
+    --sidebar-primary-foreground: 248 0.3% 98.4%;
+    --sidebar-accent: 260 4.1% 27.9%;
+    --sidebar-accent-foreground: 248 0.3% 98.4%;
+    --sidebar-border: 0 0% 100% / 10%;
+    --sidebar-ring: 264 2.7% 55.1%;
+
+    --status-separando-bg: 224 76% 20%;
+    --status-separando-text: 214 95% 70%;
+    --status-separando-border: 217 91% 60%;
+
+    --status-separado-bg: 161 50% 15%;
+    --status-separado-text: 152 76% 70%;
+    --status-separado-border: 160 84% 39%;
+    --chart-1: 264 24.3% 48.8%;
+    --chart-2: 162 17% 69.6%;
+    --chart-3: 70 18.8% 76.9%;
+    --chart-4: 304 26.5% 62.7%;
+    --chart-5: 16 24.6% 64.5%;
+    --sidebar: 266 4% 20.8%;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/50;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Status badge variants */
+  .badge-separando {
+    @apply bg-[hsl(var(--status-separando-bg))] text-[hsl(var(--status-separando-text))] uppercase font-bold text-xs tracking-wide px-3 py-1 rounded;
+  }
+
+  .badge-separado {
+    @apply bg-[hsl(var(--status-separado-bg))] text-[hsl(var(--status-separado-text))] uppercase font-bold text-xs tracking-wide px-3 py-1 rounded;
+  }
+
+  .badge-finalizado {
+    @apply bg-[hsl(var(--status-separado-bg))] text-[hsl(var(--status-separado-text))] uppercase font-bold text-xs tracking-wide px-3 py-1 rounded;
+  }
+
+  /* Card with status border */
+  .card-separando {
+    @apply border-l-[6px] border-l-[hsl(var(--status-separando-border))];
+  }
+
+  .card-separado {
+    @apply border-l-[6px] border-l-[hsl(var(--status-separado-border))];
+  }
+
+  .card-finalizado {
+    @apply border-l-[6px] border-l-[hsl(var(--status-separado-border))];
+  }
+
+  /* Label styling */
+  .field-label {
+    @apply text-xs uppercase font-semibold text-muted-foreground tracking-wide;
+  }
+
+  .field-value {
+    @apply text-base font-medium text-foreground;
+  }
+
+  /* Skeleton loading animation */
+  .skeleton-pulse {
+    @apply animate-pulse bg-muted rounded;
+  }
+
+  /* Toast animations */
+  .toast-enter {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .toast-exit {
+    animation: slideOutRight 0.3s ease-in;
+  }
+}
+
+@layer utilities {
+  /* Custom animations */
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .animate-shake {
+    animation: shake 0.4s ease-in-out;
+  }
+}

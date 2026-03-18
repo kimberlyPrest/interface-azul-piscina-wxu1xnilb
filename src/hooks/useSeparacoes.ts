@@ -1,0 +1,202 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { StatusSeparacao, NivelComplexidade, TipoEntrega } from '@/types/separacao';
+import { format, eachDayOfInterval, startOfDay, parseISO, isAfter, isBefore } from 'date-fns';
+
+export type DeliveryType = 'flexible' | 'scheduled';
+
+export interface Separacao {
+  id: string;
+  cliente: string;
+  codigo_obra: string;
+  data_entrega: string;
+  responsavel_recebimento: string;
+  telefone: string | null;
+  endereco: string;
+  status: StatusSeparacao;
+  material_tipo: 'texto' | 'imagem' | 'pdf' | 'tabela' | 'arquivos' | null;
+  material_conteudo: string;
+  delivery_type: DeliveryType;
+  scheduled_time: string | null;
+  order_in_route: number | null;
+  observacoes_internas: string | null;
+  gestora_equipe: string;
+  numero_venda: string[];
+  solicitante: string | null;
+  separacoes_parciais: string[] | null;
+  nivel_complexidade: NivelComplexidade | null;
+  tipo_entrega: TipoEntrega | null;
+  transportadora_nome: string | null;
+  codigo_rastreamento: string | null;
+  numero_entrega: string | null;
+  data_inicio_separacao: string | null;
+  created_at: string;
+  updated_at: string;
+  tipo_pedido?: string;
+  garantia_detalhes?: string | null;
+  inclui_garantia?: boolean;
+  garantia_peca?: string | null;
+  garantia_motivo?: string | null;
+}
+
+export function useSeparacoes() {
+  const [separacoes, setSeparacoes] = useState<Separacao[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const fetchSeparacoes = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      // ONLY fetch the 3 main statuses for separation area
+      const { data, error: fetchError } = await supabase
+        .from('separacoes')
+        .select('*')
+        .in('status', ['material_solicitado', 'em_separacao', 'separado'])
+        .order('data_entrega', { ascending: true });
+
+      if (fetchError) throw fetchError;
+      
+      setSeparacoes((data || []) as Separacao[]);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro ao carregar separações';
+      setError(message);
+      toast({
+        title: 'Erro ao carregar dados',
+        description: message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateStatus = async (id: string, newStatus: StatusSeparacao) => {
+    // BUG 2 FIX: Simplified status update with logging
+    console.log('[useSeparacoes] Updating status:', { id, newStatus });
+    
+    // Optimistic update
+    const previousSeparacoes = [...separacoes];
+    setSeparacoes(prev =>
+      prev.map(s => (s.id === id ? { ...s, status: newStatus } : s))
+    );
+
+    try {
+      // Update status + set data_inicio_separacao when entering "em_separacao"
+      const updatePayload: Record<string, unknown> = { status: newStatus };
+      if (newStatus === 'em_separacao') {
+        updatePayload.data_inicio_separacao = new Date().toISOString();
+      }
+      
+      const { data, error: updateError } = await supabase
+        .from('separacoes')
+        .update(updatePayload)
+        .eq('id', id)
+        .select();
+
+      console.log('[useSeparacoes] Update result:', { data, error: updateError });
+
+      if (updateError) throw updateError;
+
+      const statusLabels: Record<StatusSeparacao, string> = {
+        material_solicitado: 'Material Solicitado',
+        em_separacao: 'Em Separação',
+        separado: 'Separado',
+        matheus_separacao_garantia: 'Garantia - Matheus',
+        pendente: 'Pendente',
+        finalizado: 'Finalizado',
+      };
+
+      toast({
+        title: 'Status atualizado!',
+        description: `Ordem marcada como "${statusLabels[newStatus]}"`,
+        className: 'bg-success text-success-foreground border-none',
+      });
+      
+      // Refresh to ensure consistency
+      await fetchSeparacoes();
+    } catch (err) {
+      // Rollback on error
+      setSeparacoes(previousSeparacoes);
+      
+      console.error('[useSeparacoes] Status update error:', err);
+      const message = err instanceof Error ? err.message : 'Erro ao atualizar status';
+      toast({
+        title: 'Erro ao atualizar',
+        description: message,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const deleteSeparacao = async (id: string) => {
+    try {
+      // Delete related records first (arquivos, itens)
+      await supabase.from('separacao_arquivos').delete().eq('separacao_id', id);
+      await supabase.from('separacao_itens').delete().eq('separacao_id', id);
+      
+      const { error: deleteError } = await supabase
+        .from('separacoes')
+        .delete()
+        .eq('id', id);
+
+      if (deleteError) throw deleteError;
+
+      setSeparacoes(prev => prev.filter(s => s.id !== id));
+      toast({
+        title: 'Pedido excluído',
+        description: 'O pedido foi removido com sucesso.',
+        className: 'bg-success text-success-foreground border-none',
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro ao excluir pedido';
+      toast({
+        title: 'Erro ao excluir',
+        description: message,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const findByCodigoObra = async (codigo: string): Promise<Separacao | null> => {
+    try {
+      // Support both codigo_obra (numeric) and numero_entrega (LUC-XXXX) formats
+      const isNumeroEntrega = /^LUC-/i.test(codigo);
+      
+      const { data, error: fetchError } = await supabase
+        .from('separacoes')
+        .select('*')
+        .eq(isNumeroEntrega ? 'numero_entrega' : 'codigo_obra', isNumeroEntrega ? codigo.toUpperCase() : codigo)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+      
+      return (data as Separacao) || null;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro ao buscar obra';
+      toast({
+        title: 'Erro na busca',
+        description: message,
+        variant: 'destructive',
+      });
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    fetchSeparacoes();
+  }, []);
+
+  return {
+    separacoes,
+    isLoading,
+    error,
+    updateStatus,
+    deleteSeparacao,
+    findByCodigoObra,
+    refetch: fetchSeparacoes,
+  };
+}

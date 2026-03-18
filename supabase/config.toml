@@ -1,0 +1,10 @@
+project_id = "lxdaqoqxhyzwqzjpinrj"
+
+[functions.optimize-route]
+verify_jwt = false
+
+[functions.sincronizar-fotos]
+verify_jwt = false
+
+[functions.sincronizar-materiais]
+verify_jwt = false
